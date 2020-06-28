@@ -1,0 +1,26 @@
+{
+  "name": "ui-alert",
+  "version": "0.0.4",
+  "description": "Alert",
+  "main": "./lib/index.js",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build:lib": "tsc",
+    "clean:lib": "rimraf lib"
+  },
+  "devDependencies": {
+    "tslint": "5.10.0",
+    "typescript": "^3.3.3333"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/ui-common/alert"
+  },
+  "keywords": [
+    "alert",
+    "ui-alert"
+  ]
+}
