@@ -10,26 +10,24 @@ export enum AlertType {
   Confirm = 'Confirm',
   Alert = 'Alert'
 }
-
+let init: boolean;
+const r0 = new RegExp('&', 'g');
+const r1 = new RegExp('>', 'g');
+const r2 = new RegExp('<', 'g');
+const r3 = new RegExp('"', 'g');
 // tslint:disable-next-line:class-name
 export class resources {
-  private static _isInit = false;
-  private static _r0 = new RegExp('&', 'g');
-  private static _r1 = new RegExp('>', 'g');
-  private static _r2 = new RegExp('<', 'g');
-  private static _r3 = new RegExp('"', 'g');
-
-  static sysAlert: any;
-  static sysMessage: any;
-  static sysMessageHeader: any;
-  static sysErrorDetail: any;
-  static sysErrorDetailText: any;
-  static sysYes: any;
-  static sysNo: any;
-  static sysErrorDetailCaret: any;
+  static sysAlert: HTMLElement;
+  static sysMessage: HTMLElement;
+  static sysMessageHeader: HTMLElement;
+  static sysErrorDetail: HTMLElement;
+  static sysErrorDetailText: HTMLElement;
+  static sysYes: HTMLElement;
+  static sysNo: HTMLElement;
+  static sysErrorDetailCaret: HTMLElement;
 
   static init() {
-    if (resources._isInit === false) {
+    if (!init) {
       resources.sysAlert = (window as any).sysAlert;
       resources.sysMessage = (window as any).sysMessage;
       resources.sysMessageHeader = (window as any).sysMessageHeader;
@@ -39,7 +37,7 @@ export class resources {
       resources.sysYes = (window as any).sysYes;
       resources.sysNo = (window as any).sysNo;
 
-      resources._isInit = true;
+      init = true;
     }
   }
 
@@ -48,16 +46,16 @@ export class resources {
       return '';
     }
     if (text.indexOf('"') >= 0) {
-      text = text.replace(resources._r3, '&quot;');
+      text = text.replace(r3, '&quot;');
     }
     if (text.indexOf('&') >= 0) {
-      text = text.replace(resources._r0, '&amp;');
+      text = text.replace(r0, '&amp;');
     }
     if (text.indexOf('>') >= 0) {
-      text = text.replace(resources._r1, '&gt;');
+      text = text.replace(r1, '&gt;');
     }
     if (text.indexOf('<') >= 0) {
-      text = text.replace(resources._r2, '&lt;');
+      text = text.replace(r2, '&lt;');
     }
     return text;
   }
@@ -122,56 +120,18 @@ export function showAlert(msg: string, header?: string, detail?: string, type?: 
 export function confirm(msg: string, header: string, yesCallback?: () => void, btnLeftText?: string, btnRightText?: string, noCallback?: () => void): void {
   showAlert(msg, header, null, AlertType.Confirm, AlertIconType.Warning, btnLeftText, btnRightText, yesCallback, noCallback);
 }
-
+export function alert(msg: string, header?: string, detail?: string, callback?: () => void): void {
+  showAlert(msg, header, detail, AlertType.Alert, AlertIconType.Error, null, null, callback, null);
+}
 export function alertError(msg: string, header?: string, detail?: string, callback?: () => void): void {
   showAlert(msg, header, detail, AlertType.Alert, AlertIconType.Error, null, null, callback, null);
 }
-
 export function alertWarning(msg: string, header?: string, callback?: () => void): void {
   showAlert(msg, header, null, AlertType.Alert, AlertIconType.Warning, null, null, callback, null);
 }
-
 export function alertInfo(msg: string, header?: string, callback?: () => void): void {
   showAlert(msg, header, null, AlertType.Alert, AlertIconType.Info, null, null, callback, null);
 }
-
 export function alertSuccess(msg: string, detail?: string, callback?: () => void): void {
   showAlert(msg, detail, null, AlertType.Alert, AlertIconType.Success, null, null, callback, null);
 }
-
-export interface AlertService {
-  confirm(msg: string, header: string, yesCallback?: () => void, btnLeftText?: string, btnRightText?: string, noCallback?: () => void): void;
-  alertError(msg: string, header?: string, detail?: string, callback?: () => void): void;
-  alertWarning(msg: string, header?: string, callback?: () => void): void;
-  alertInfo(msg: string, header?: string, callback?: () => void): void;
-  alertSuccess(msg: string, detail?: string, callback?: () => void): void;
-  showAlert(msg: string, header?: string, detail?: string, type?: AlertType, iconType?: AlertIconType, btnLeftText?: string, btnRightText?: string, yesCallback?: () => void, noCallback?: () => void): void;
-}
-
-class DefaultAlertService implements AlertService {
-  confirm(msg: string, header: string, yesCallback?: () => void, btnLeftText?: string, btnRightText?: string, noCallback?: () => void): void {
-    showAlert(msg, header, null, AlertType.Confirm, AlertIconType.Warning, btnLeftText, btnRightText, yesCallback, noCallback);
-  }
-
-  alertError(msg: string, header?: string, detail?: string, callback?: () => void): void {
-    showAlert(msg, header, detail, AlertType.Alert, AlertIconType.Error, null, null, callback, null);
-  }
-
-  alertWarning(msg: string, header?: string, callback?: () => void): void {
-    showAlert(msg, header, null, AlertType.Alert, AlertIconType.Warning, null, null, callback, null);
-  }
-
-  alertInfo(msg: string, header?: string, callback?: () => void): void {
-    showAlert(msg, header, null, AlertType.Alert, AlertIconType.Info, null, null, callback, null);
-  }
-
-  alertSuccess(msg: string, detail?: string, callback?: () => void): void {
-    showAlert(msg, detail, null, AlertType.Alert, AlertIconType.Success, null, null, callback, null);
-  }
-
-  showAlert(msg: string, header?: string, detail?: string, type?: AlertType, iconType?: AlertIconType, btnLeftText?: string, btnRightText?: string, yesCallback?: () => void, noCallback?: () => void): void {
-    showAlert(msg, header, detail, type, iconType, btnLeftText, btnRightText, yesCallback, noCallback);
-  }
-}
-
-export const uialert = new DefaultAlertService();
