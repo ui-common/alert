@@ -1,1 +1,1 @@
-# alert
+# ui-alert

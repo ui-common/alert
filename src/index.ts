@@ -1,10 +1,6 @@
 export type Type = 'Confirm' | 'Alert';
-export type IconType = 'Error' | 'Warning' | 'Success' | 'Info' | 'Alert';
+export type IconType = 'Error' | 'Warning' | 'Confirm' | 'Success' | 'Info' | 'Alert';
 let init: boolean;
-const r0 = new RegExp('&', 'g');
-const r1 = new RegExp('>', 'g');
-const r2 = new RegExp('<', 'g');
-const r3 = new RegExp('"', 'g');
 // tslint:disable-next-line:class-name
 export class resources {
   static sysAlert: HTMLElement;
@@ -35,17 +31,23 @@ export class resources {
     if (!text) {
       return '';
     }
+    const isIgnore = text.indexOf('<br />') >= 0;
+
     if (text.indexOf('"') >= 0) {
-      text = text.replace(r3, '&quot;');
+      text = text.replace(/"/g, '&quot;');
     }
     if (text.indexOf('&') >= 0) {
-      text = text.replace(r0, '&amp;');
+      text = text.replace(/&/g, '&amp;');
     }
     if (text.indexOf('>') >= 0) {
-      text = text.replace(r1, '&gt;');
+      text = text.replace(/>/g, '&gt;');
     }
     if (text.indexOf('<') >= 0) {
-      text = text.replace(r2, '&lt;');
+      text = text.replace(/</g, '&lt;');
+    }
+    // Ignore escaping if </br> tag is present
+    if (isIgnore) {
+      text = text.replace(/&lt;br \/&gt;/g, '<br />');
     }
     return text;
   }
@@ -80,22 +82,33 @@ export function showAlert(msg: string, header?: string, detail?: string, type?: 
       sysErrorDetailText.innerHTML = resources.escape(detail);
     }
   }
-
   sysMessage.innerHTML = resources.escape(msg);
   sysMessageHeader.innerHTML = resources.escape(header);
+  sysAlert.classList.remove('success-icon', 'success-icon',  'info-icon', 'confirm-icon', 'danger-icon', 'warning-icon');
   if (iconType === 'Alert') {
     if (!sysAlert.classList.contains('warning-icon')) {
       sysAlert.classList.add('warning-icon');
     }
-    sysAlert.classList.remove('warning-icon');
+  } else if (iconType === 'Success') {
+    if (!sysAlert.classList.contains('success-icon')) {
+      sysAlert.classList.add('success-icon');
+    }
+  }  else if (iconType === 'Info') {
+    if (!sysAlert.classList.contains('info-icon')) {
+      sysAlert.classList.add('info-icon');
+    }
+  } else if (iconType === 'Confirm') {
+    if (!sysAlert.classList.contains('confirm-icon')) {
+      sysAlert.classList.add('confirm-icon');
+    }
+  } else if (iconType === 'Warning') {
+    if (!sysAlert.classList.contains('warning-icon')) {
+      sysAlert.classList.add('warning-icon');
+    }
   } else if (iconType === 'Error') {
     if (!sysAlert.classList.contains('danger-icon')) {
       sysAlert.classList.add('danger-icon');
     }
-    sysAlert.classList.remove('warning-icon');
-  } else {
-    sysAlert.classList.remove('danger-icon');
-    sysAlert.classList.remove('warning-icon');
   }
   const activeElement = (window as any).document.activeElement;
   sysYes.innerHTML = resources.escape(btnRightText);
@@ -108,7 +121,7 @@ export function showAlert(msg: string, header?: string, detail?: string, type?: 
 }
 
 export function confirm(msg: string, header?: string, yesCallback?: () => void, btnLeftText?: string, btnRightText?: string, noCallback?: () => void): void {
-  showAlert(msg, header, undefined, 'Confirm', 'Warning', btnLeftText, btnRightText, yesCallback, noCallback);
+  showAlert(msg, header, undefined, 'Confirm', 'Confirm', btnLeftText, btnRightText, yesCallback, noCallback);
 }
 export function alert(msg: string, header?: string, detail?: string, callback?: () => void): void {
   showAlert(msg, header, detail, 'Alert', 'Error', undefined, undefined, callback, undefined);
