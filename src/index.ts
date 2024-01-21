@@ -11,6 +11,8 @@ export class resources {
   static sysYes: HTMLElement;
   static sysNo: HTMLElement;
   static sysErrorDetailCaret: HTMLElement;
+  static rightText?: string;
+  static leftText?: string;
 
   static init() {
     if (!init) {
@@ -63,6 +65,9 @@ export function showAlert(msg: string, header?: string, detail?: string, type?: 
   const sysYes = resources.sysYes;
   const sysNo = resources.sysNo;
   const sysErrorDetailCaret = resources.sysErrorDetailCaret;
+
+  btnLeftText = btnLeftText ? btnLeftText : resources.leftText;
+  btnRightText = btnRightText ? btnRightText : resources.rightText;
 
   if (type === 'Alert') {
     if (!sysAlert.classList.contains('alert-only')) {
