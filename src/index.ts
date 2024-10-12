@@ -13,6 +13,11 @@ export class resources {
   static sysErrorDetailCaret: HTMLElement;
   static rightText?: string;
   static leftText?: string;
+  static confirmHeader?: string;
+  static errorHeader?: string;
+  static warningHeader?: string;
+  static infoHeader?: string;
+  static successHeader?: string;
 
   static init() {
     if (!init) {
@@ -55,7 +60,7 @@ export class resources {
   }
 }
 
-export function showAlert(msg: string, header?: string, detail?: string, type?: Type, iconType?: IconType, btnLeftText?: string, btnRightText?: string, yesCallback?: () => void, noCallback?: () => void): void {
+export function showAlert(msg: string, header?: string, type?: Type, iconType?: IconType, btnLeftText?: string, btnRightText?: string, yesCallback?: () => void, noCallback?: () => void, detail?: string): void {
   resources.init();
   const sysAlert = resources.sysAlert;
   const sysMessage = resources.sysMessage;
@@ -125,21 +130,28 @@ export function showAlert(msg: string, header?: string, detail?: string, type?: 
   sysYes.focus();
 }
 
-export function confirm(msg: string, header?: string, yesCallback?: () => void, btnLeftText?: string, btnRightText?: string, noCallback?: () => void): void {
-  showAlert(msg, header, undefined, 'Confirm', 'Confirm', btnLeftText, btnRightText, yesCallback, noCallback);
+export function confirm(msg: string, yesCallback?: () => void, header?: string, btnLeftText?: string, btnRightText?: string, noCallback?: () => void): void {
+  const l = (btnLeftText ? btnLeftText : resources.leftText);
+  const r = (btnRightText ? btnRightText : resources.rightText);
+  const h = (header ? header : resources.confirmHeader);
+  showAlert(msg, h, 'Confirm', 'Confirm', l, r, yesCallback, noCallback);
 }
-export function alert(msg: string, header?: string, detail?: string, callback?: () => void): void {
-  showAlert(msg, header, detail, 'Alert', 'Error', undefined, undefined, callback, undefined);
+export function alert(msg: string, header?: string, callback?: () => void, detail?: string): void {
+  showAlert(msg, header, 'Alert', 'Error', undefined, undefined, callback, undefined, detail);
 }
-export function alertError(msg: string, header?: string, detail?: string, callback?: () => void): void {
-  showAlert(msg, header, detail, 'Alert', 'Error', undefined, undefined, callback, undefined);
+export function alertError(msg: string, callback?: () => void, header?: string, detail?: string): void {
+  const h = (header ? header : resources.errorHeader);
+  showAlert(msg, h, 'Alert', 'Error', undefined, undefined, callback, undefined, detail);
 }
-export function alertWarning(msg: string, header?: string, callback?: () => void): void {
-  showAlert(msg, header, undefined, 'Alert', 'Warning', undefined, undefined, callback, undefined);
+export function alertWarning(msg: string, callback?: () => void, header?: string): void {
+  const h = (header ? header : resources.warningHeader);
+  showAlert(msg, h, 'Alert', 'Warning', undefined, undefined, callback, undefined);
 }
-export function alertInfo(msg: string, header?: string, callback?: () => void): void {
-  showAlert(msg, header, undefined, 'Alert', 'Info', undefined, undefined, callback, undefined);
+export function alertInfo(msg: string, callback?: () => void, header?: string): void {
+  const h = (header ? header : resources.infoHeader);
+  showAlert(msg, h, 'Alert', 'Info', undefined, undefined, callback, undefined);
 }
-export function alertSuccess(msg: string, detail?: string, callback?: () => void): void {
-  showAlert(msg, detail, undefined, 'Alert', 'Success', undefined, undefined, callback, undefined);
+export function alertSuccess(msg: string, header?: string, callback?: () => void): void {
+  const h = (header ? header : resources.successHeader);
+  showAlert(msg, h, 'Alert', 'Success', undefined, undefined, callback, undefined);
 }
