@@ -149,19 +149,19 @@ export function confirm(msg: string, yesCallback?: () => void, header?: string, 
 export function alert(msg: string, header?: string, callback?: () => void, detail?: string): void {
   showAlert(msg, header, "Alert", "Error", "", "", callback, undefined, detail)
 }
-export function alertError(msg: string, header?: string, callback?: () => void, detail?: string): void {
+export function alertError(msg: string, callback?: () => void, header?: string, detail?: string): void {
   const h = header ? header : resources.errorHeader
   showAlert(msg, h, "Alert", "Error", "", "", callback, undefined, detail)
 }
-export function alertWarning(msg: string, header?: string, callback?: () => void): void {
+export function alertWarning(msg: string, callback?: () => void, header?: string): void {
   const h = header ? header : resources.warningHeader
   showAlert(msg, h, "Alert", "Warning", "", "", callback, undefined)
 }
-export function alertInfo(msg: string, header?: string, callback?: () => void): void {
+export function alertInfo(msg: string, callback?: () => void, header?: string): void {
   const h = header ? header : resources.infoHeader
   showAlert(msg, h, "Alert", "Info", "", "", callback, undefined)
 }
-export function alertSuccess(msg: string, header?: string, callback?: () => void): void {
+export function alertSuccess(msg: string, callback?: () => void, header?: string): void {
   const h = header ? header : resources.successHeader
   showAlert(msg, h, "Alert", "Success", "", "", callback, undefined)
 }
